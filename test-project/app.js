@@ -1,6 +1,7 @@
 //init HTML elements
 const photo = document.querySelector(".photo");
 const btnCreater = document.querySelector(".creater");
+const btnDark = document.querySelector(".dark");
 
 const cardSect = document.querySelector(".card__section");
 
@@ -99,6 +100,7 @@ function createCard() {
   // };
 
   globalCount++;
+  getPageSettings();
 
   return {
     param: param,
@@ -160,9 +162,72 @@ async function getRandomApi(obj) {
   });
 }
 
+function darkThemeMaker() {
+  document.querySelector(".main").style = "background-color: #282B2F";
+  document.querySelectorAll("div.card").forEach((element) => {
+    element.style =
+      "background-color: #494D50; box-shadow: 0px 4px 10px 2px rgba(212, 212, 212, 0.15);";
+  });
+  document.querySelectorAll(".text-info").forEach((element) => {
+    element.style = "color: white";
+  });
+  document.querySelector(".footer").style = "background-color: #494D50";
+  btnCreater.style = "color: white";
+  btnDark.style = "color: white";
+  btnDark.innerHTML = "Light theme";
+}
+
+function lightThemeMaker() {
+  document.querySelector(".main").style = "background-color:  #edeef0";
+  document.querySelectorAll("div.card").forEach((element) => {
+    element.style =
+      "background-color: white; box-shadow: 0px 4px 10px 2px rgba(0, 0, 0, 0.2);";
+  });
+  document.querySelectorAll(".text-info").forEach((element) => {
+    element.style = "color: black";
+  });
+  document.querySelector(".footer").style =
+    "background-color:  rgb(192, 192, 192);";
+  btnCreater.style = "color: balck";
+  btnDark.style = "color: balck";
+  btnDark.innerHTML = "Dark theme";
+}
+
 btnCreater.addEventListener("click", () => {
   getRandomApi(createCard());
   // console.log(openObg);
   // let actualCounter = Object.keys(openObg)[globalCount];
   // console.log(openObg[actualCounter]);
 });
+
+btnDark.addEventListener("click", () => {
+  chengeSettings(getPageSettings());
+});
+
+function getPageSettings() {
+  const count = localStorage.getItem("darkTheme");
+  if (count === null) {
+    setPageSettings();
+  } else if (count === "true") {
+    darkThemeMaker();
+  } else {
+    lightThemeMaker();
+  }
+  return count;
+}
+
+function setPageSettings(vall = "false") {
+  localStorage.setItem("darkTheme", vall);
+}
+
+function chengeSettings(count) {
+  if (count === "false") {
+    darkThemeMaker();
+    setPageSettings("true");
+  } else {
+    lightThemeMaker();
+    setPageSettings("false");
+  }
+}
+
+getPageSettings();
